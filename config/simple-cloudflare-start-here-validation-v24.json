@@ -1,0 +1,15 @@
+{
+  "version": "v24-simple-cloudflare-start-here",
+  "adds": [
+    "00_START_HERE_CLOUDFLARE_LOGIN_AND_DEPLOY.cmd",
+    "Start_Cloudflare_Login_Deploy.ps1",
+    "README_START_HERE_GR.txt"
+  ],
+  "changes": [
+    "browser login first",
+    "no API token prompt in normal flow",
+    "verify whoami before deploy",
+    "API token fallback moved to advanced folder"
+  ],
+  "run": "00_START_HERE_CLOUDFLARE_LOGIN_AND_DEPLOY.cmd"
+}

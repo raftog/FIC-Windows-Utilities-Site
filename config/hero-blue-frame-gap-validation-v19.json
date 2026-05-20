@@ -1,0 +1,11 @@
+{
+  "version": "v19-hero-blue-frame-gap",
+  "requested_change": "να υπάρχει μπλε πλαίσιο και από κάτω 1 εκατοστό απόσταση",
+  "changes": [
+    "blue header gradient extended from 250px to 320px",
+    "hero min-height increased to keep all hero text inside blue area",
+    "hero bottom padding increased to ~38px (~1cm visual gap)",
+    "subtitle remains inside the blue area"
+  ],
+  "run": "13_PUSH_HERO_BLUE_FRAME_GAP.cmd"
+}

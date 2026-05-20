@@ -1,0 +1,8 @@
+{
+  "version": "v5-github-pages-ready",
+  "repo": "raftog/FIC-Windows-Utilities-Site",
+  "test_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "statistics_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/#statistics",
+  "root_contains_index_html": true,
+  "custom_domain_later": "apps.forensiclabs.gr"
+}
