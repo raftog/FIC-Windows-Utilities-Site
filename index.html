@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="el" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F.I.C. Windows Utilities</title>
+  <meta name="description" content="F.I.C. Windows Utilities - LatencyCheck and HardDiskTemp downloads, changelog, SHA256 and installation instructions.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">FIC</div>
+      <div>
+        <div class="brand-title" data-i18n="title">F.I.C. Windows Utilities</div>
+        <div class="brand-subtitle" data-i18n="subtitle">Επαγγελματικά εργαλεία Windows από G.V. Raftogiannis FIC</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#home" data-i18n="nav_home">Αρχική</a>
+      <a href="#latencycheck" data-i18n="nav_latency">LatencyCheck</a>
+      <a href="#harddisktemp" data-i18n="nav_harddisk">HardDiskTemp</a>
+      <a href="#downloads" data-i18n="nav_downloads">Λήψεις</a>
+      <a href="#statistics" data-i18n="nav_stats">Στατιστικά</a>
+      <a href="https://www.forensiclabs.gr/" data-i18n="nav_forensic">ForensicLabs.gr</a>
+    </nav>
+    <label class="language-box">
+      <span data-i18n="language">Γλώσσα</span>
+      <select id="languageSelect" aria-label="Language selector"></select>
+    </label>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">apps.forensiclabs.gr</p>
+        <h1 data-i18n="hero_title">Αξιόπιστα διαγνωστικά εργαλεία για συστήματα Windows</h1>
+        <p data-i18n="hero_text">Ανεξάρτητος χώρος εφαρμογών για το Latency Check Professional GUI και το HardDiskTemp.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#downloads" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="https://www.forensiclabs.gr/" data-i18n="site_link">Κύριο site F.I.C.</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="status-card">
+          <span class="status-dot"></span>
+          <strong>GitHub Releases</strong>
+          <p>Installers + SHA256 + Changelog</p>
+        </div>
+        <div class="mini-grid">
+          <span>LatencyCheck</span>
+          <span>HardDiskTemp</span>
+          <span>31 Languages</span>
+          <span>Static Site</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="apps-grid">
+      <article id="latencycheck" class="app-card">
+        <div class="app-icon latency">LC</div>
+        <h2 data-i18n="latency_title">Latency Check Professional GUI</h2>
+        <p data-i18n="latency_desc"></p>
+        <div class="meta-row"><span data-i18n="latest_version">Τελευταία έκδοση</span><strong id="latencyVersion" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="meta-row"><span data-i18n="download_count">Λήψεις</span><strong id="latencyDownloads" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="card-actions">
+          <a class="button primary" id="latencyDownload" href="/download/latencycheck" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="https://github.com/raftog/LatencyCheck-Updates/releases/latest" target="_blank" rel="noopener" data-i18n="changelog">Ιστορικό αλλαγών</a>
+        </div>
+      </article>
+
+      <article id="harddisktemp" class="app-card">
+        <div class="app-icon disk">HD</div>
+        <h2 data-i18n="harddisk_title">HardDiskTemp</h2>
+        <p data-i18n="harddisk_desc"></p>
+        <div class="meta-row"><span data-i18n="latest_version">Τελευταία έκδοση</span><strong id="harddiskVersion" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="meta-row"><span data-i18n="download_count">Λήψεις</span><strong id="harddiskDownloads" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="card-actions">
+          <a class="button primary" id="harddiskDownload" href="/download/harddisktemp" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="https://github.com/raftog/HardDiskTemp-Updates/releases/latest" target="_blank" rel="noopener" data-i18n="changelog">Ιστορικό αλλαγών</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="downloads" class="section">
+      <h2 data-i18n="nav_downloads">Λήψεις</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3 data-i18n="verify_title">Έλεγχος λήψης</h3>
+          <p data-i18n="verify_text"></p>
+          <pre id="shaBox">LatencyCheck: <span id="latencySha" data-i18n="loading">Φόρτωση...</span>
+HardDiskTemp: <span id="harddiskSha" data-i18n="loading">Φόρτωση...</span></pre>
+        </div>
+        <div class="info-card">
+          <h3 data-i18n="install_guide">Οδηγίες εγκατάστασης</h3>
+          <p data-i18n="req_text"></p>
+          <ol>
+            <li>Download latest installer.</li>
+            <li>Right click → Run as administrator.</li>
+            <li>Verify SHA256 when needed.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="statistics" class="section">
+      <h2 data-i18n="nav_stats">Στατιστικά</h2>
+      <div class="stats-grid">
+        <div class="stat-card"><span data-i18n="visitor_counter">Μετρητής επισκέψεων</span><strong id="visitorCounter">Cloudflare Analytics</strong></div>
+        <div class="stat-card"><span data-i18n="country_stats">Λήψεις ανά χώρα</span><strong id="countryStats" data-i18n="not_available">Δεν είναι ακόμη διαθέσιμο</strong></div>
+      </div>
+      <p class="note" data-i18n="stats_note"></p>
+      <p class="note" data-i18n="privacy_text"></p>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="links">Σύνδεσμοι</h2>
+      <div class="links-row">
+        <a href="https://www.forensiclabs.gr/" target="_blank" rel="noopener" data-i18n="site_link">Κύριο site F.I.C.</a>
+        <a href="https://github.com/raftog/LatencyCheck-Updates" target="_blank" rel="noopener">LatencyCheck GitHub</a>
+        <a href="https://github.com/raftog/HardDiskTemp-Updates" target="_blank" rel="noopener">HardDiskTemp GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="footer_note"></p>
+    <a href="#home" data-i18n="back_to_top">Επιστροφή επάνω</a>
+  </footer>
+
+  <script src="assets/js/translations.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
