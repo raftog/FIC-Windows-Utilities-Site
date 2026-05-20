@@ -1,0 +1,7 @@
+{
+  "version": "v15-own-changelog-approach",
+  "removed_visible_github_release_links_from_changelog": true,
+  "removed_github_release_note_wording": true,
+  "changelog_now": "own professional release approach shown inside the site",
+  "run": "09_PUSH_OWN_CHANGELOG_APPROACH.cmd"
+}

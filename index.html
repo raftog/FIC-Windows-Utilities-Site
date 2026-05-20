@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="el" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F.I.C. Windows Utilities</title>
+  <meta name="description" content="F.I.C. Windows Utilities - LatencyCheck and HardDiskTemp downloads, changelog, SHA256 and installation instructions.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">FIC</div>
+      <div>
+        <div class="brand-title" data-i18n="title">F.I.C. Windows Utilities</div>
+        <div class="brand-subtitle" data-i18n="subtitle">Επαγγελματικά εργαλεία Windows από G.V. Raftogiannis FIC</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#home" data-i18n="nav_home">Αρχική</a>
+      <a href="#latencycheck" data-i18n="nav_latency">LatencyCheck</a>
+      <a href="#harddisktemp" data-i18n="nav_harddisk">HardDiskTemp</a>
+      <a href="#downloads" data-i18n="nav_downloads">Λήψεις</a>
+      <a href="#statistics" data-i18n="nav_stats">Στατιστικά</a>
+      <a href="https://www.forensiclabs.gr/" data-i18n="nav_forensic">ForensicLabs.gr</a>
+    </nav>
+    <label class="language-box">
+      <span data-i18n="language">Γλώσσα</span>
+      <select id="languageSelect" aria-label="Language selector"></select>
+    </label>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">apps.forensiclabs.gr</p>
+        <h1 data-i18n="hero_title">Αξιόπιστα διαγνωστικά εργαλεία για συστήματα Windows</h1>
+        <p data-i18n="hero_text">Ανεξάρτητος χώρος εφαρμογών για το Latency Check Professional GUI και το HardDiskTemp.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#downloads" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="https://www.forensiclabs.gr/" data-i18n="site_link">Κύριο site F.I.C.</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="apps-grid">
+      <article id="latencycheck" class="app-card">
+        <div class="app-icon latency">LC</div>
+        <h2 data-i18n="latency_title">Latency Check Professional GUI</h2>
+        <p data-i18n="latency_desc"></p>
+        <div class="meta-row"><span data-i18n="latest_version">Τελευταία έκδοση</span><strong id="latencyVersion" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="meta-row"><span data-i18n="download_count">Λήψεις</span><strong id="latencyDownloads" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="card-actions">
+          <a class="button primary" id="latencyDownload" href="/download/latencycheck" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="#changelog" data-i18n="changelog">Ιστορικό αλλαγών</a>
+        </div>
+      </article>
+
+      <article id="harddisktemp" class="app-card">
+        <div class="app-icon disk">HD</div>
+        <h2 data-i18n="harddisk_title">HardDiskTemp</h2>
+        <p data-i18n="harddisk_desc"></p>
+        <div class="meta-row"><span data-i18n="latest_version">Τελευταία έκδοση</span><strong id="harddiskVersion" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="meta-row"><span data-i18n="download_count">Λήψεις</span><strong id="harddiskDownloads" data-i18n="loading">Φόρτωση...</strong></div>
+        <div class="card-actions">
+          <a class="button primary" id="harddiskDownload" href="/download/harddisktemp" data-i18n="download_latest">Λήψη τελευταίας έκδοσης</a>
+          <a class="button ghost" href="#changelog" data-i18n="changelog">Ιστορικό αλλαγών</a>
+        </div>
+      </article>
+    </section>
+
+
+    <section id="changelog" class="section">
+      <h2 data-i18n="changelog">Ιστορικό αλλαγών</h2>
+      <p class="note" data-i18n="changelog_own_approach_intro">
+        Οι αλλαγές παρουσιάζονται με επαγγελματική, κατανοητή περιγραφή και όχι ως τεχνική σελίδα repository.
+      </p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3 data-i18n="latency_title">Latency Check Professional GUI</h3>
+          <p id="latencyReleaseTitle" data-i18n="loading">Φόρτωση...</p>
+          <div id="latencyReleaseNotes" class="release-notes" data-i18n="loading">Φόρτωση...</div>
+        </div>
+        <div class="info-card">
+          <h3 data-i18n="harddisk_title">HardDiskTemp</h3>
+          <p id="harddiskReleaseTitle" data-i18n="loading">Φόρτωση...</p>
+          <div id="harddiskReleaseNotes" class="release-notes" data-i18n="loading">Φόρτωση...</div>
+        </div>
+      </div>
+      <p class="note" data-i18n="changelog_note">
+        Το ιστορικό αλλαγών παρουσιάζεται με δική μας περιγραφή, εστιασμένη στον σκοπό της έκδοσης και στη λειτουργική βελτίωση της εφαρμογής.
+      </p>
+    </section>
+
+    <section id="downloads" class="section">
+      <h2 data-i18n="nav_downloads">Λήψεις</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3 data-i18n="verify_title">Έλεγχος λήψης</h3>
+          <p data-i18n="verify_text"></p>
+          <pre id="shaBox">LatencyCheck: <span id="latencySha" data-i18n="loading">Φόρτωση...</span>
+HardDiskTemp: <span id="harddiskSha" data-i18n="loading">Φόρτωση...</span></pre>
+        </div>
+        <div class="info-card">
+          <h3 data-i18n="install_guide">Οδηγίες εγκατάστασης</h3>
+          <p data-i18n="req_text"></p>
+          <ol>
+            <li>Download latest installer.</li>
+            <li>Right click → Run as administrator.</li>
+            <li>Verify SHA256 when needed.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="program-operation" class="section">
+      <h2 data-i18n="program_operation_title">Περιγραφή και τρόπος λειτουργίας</h2>
+      <div class="info-grid">
+        <article id="latencycheck-operation" class="info-card">
+          <h3 data-i18n="latency_title">Latency Check Professional GUI</h3>
+          <p data-i18n="latency_operation_intro">
+            Το LatencyCheck ελέγχει τη λειτουργική απόκριση ενός συστήματος Windows και βοηθά στον εντοπισμό οδηγών, trace events και συνθηκών που μπορούν να επηρεάζουν την ομαλή λειτουργία.
+          </p>
+          <ul class="operation-list">
+            <li data-i18n="latency_operation_1">Εκτελεί βασική μέτρηση απόκρισης και εμφανίζει συνολική λειτουργική αξιολόγηση.</li>
+            <li data-i18n="latency_operation_2">Υποστηρίζει προχωρημένο trace μέσω ETW/xperf για ανάλυση DPC/ISR και οδηγών.</li>
+            <li data-i18n="latency_operation_3">Διατηρεί ιστορικό αποτελεσμάτων, συγκρίσεις και αναφορές για επανέλεγχο.</li>
+            <li data-i18n="latency_operation_4">Διαχωρίζει δραστηριότητα από πραγματικό πρόβλημα απόκρισης, ώστε να μην αντιμετωπίζεται η φυσιολογική εργασία του συστήματος ως βλάβη.</li>
+          </ul>
+        </article>
+
+        <article id="harddisktemp-operation" class="info-card">
+          <h3 data-i18n="harddisk_title">HardDiskTemp</h3>
+          <p data-i18n="harddisk_operation_intro">
+            Το HardDiskTemp είναι ελαφριά εφαρμογή tray που εμφανίζει τη θερμοκρασία δίσκων και δίνει άμεση εικόνα κατάστασης χωρίς να ανοίγει πλήρες παράθυρο.
+          </p>
+          <ul class="operation-list">
+            <li data-i18n="harddisk_operation_1">Ξεκινά μαζί με τα Windows και εμφανίζεται στην περιοχή ειδοποιήσεων.</li>
+            <li data-i18n="harddisk_operation_2">Χρησιμοποιεί smartctl για ανάγνωση θερμοκρασίας όπου ο δίσκος/driver το υποστηρίζει.</li>
+            <li data-i18n="harddisk_operation_3">Είναι σχεδιασμένο για γρήγορη ορατότητα θερμοκρασίας χωρίς βαρύ περιβάλλον χρήστη.</li>
+            <li data-i18n="harddisk_operation_4">Η εγκατάσταση προσπαθεί να κρατά το εικονίδιο ορατό στο tray όπου το επιτρέπουν τα Windows.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="statistics" class="section">
+      <h2 data-i18n="nav_stats">Στατιστικά</h2>
+
+      <div class="stats-grid counters-grid">
+        <div class="stat-card">
+          <span data-i18n="visitor_counter">Μετρητής επισκέψεων</span>
+          <strong id="totalVisitsCounter" data-i18n="counter_worker_pending">Ενεργοποίηση με Worker</strong>
+          <small data-i18n="visitor_counter_note">Συγκεντρωτικός μετρητής χωρίς αποθήκευση IP.</small>
+        </div>
+
+        <div class="stat-card">
+          <span data-i18n="stats_total_downloads">Σύνολο λήψεων</span>
+          <strong id="totalStatsDownloads" data-i18n="loading">Φόρτωση...</strong>
+          <small data-i18n="download_counter_note">Από τα GitHub Release assets.</small>
+        </div>
+
+        <div class="stat-card">
+          <span data-i18n="latency_downloads">Λήψεις LatencyCheck</span>
+          <strong id="latencyStatsDownloads" data-i18n="loading">Φόρτωση...</strong>
+          <small id="latencyStatsVersion" data-i18n="loading">Φόρτωση...</small>
+        </div>
+
+        <div class="stat-card">
+          <span data-i18n="harddisk_downloads">Λήψεις HardDiskTemp</span>
+          <strong id="harddiskStatsDownloads" data-i18n="loading">Φόρτωση...</strong>
+          <small id="harddiskStatsVersion" data-i18n="loading">Φόρτωση...</small>
+        </div>
+      </div>
+
+      <div class="info-grid stats-detail-grid">
+        <div class="info-card">
+          <h3 data-i18n="country_stats">Λήψεις ανά χώρα</h3>
+          <div id="countryStatsTable" class="counter-table" data-i18n="counter_worker_pending">Ενεργοποίηση με Worker</div>
+          <p class="note" data-i18n="country_counter_note">
+            Οι λήψεις ανά χώρα ενεργοποιούνται όταν το download περάσει από Cloudflare Worker.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3 data-i18n="privacy_title">Απόρρητο</h3>
+          <p data-i18n="privacy_text">Τα στατιστικά πρέπει να αποθηκεύονται μόνο ως συγκεντρωτικοί αριθμοί, χωρίς αποθήκευση IP ή προσωπική παρακολούθηση χρήστη.</p>
+          <p class="note" data-i18n="counter_status_note">
+            Στο δοκιμαστικό GitHub Pages λειτουργεί άμεσα ο μετρητής λήψεων ανά εφαρμογή. Ο μετρητής επισκέψεων και χωρών ενεργοποιείται με το Worker.
+          </p>
+        </div>
+      </div>
+    </section>
+<section class="section">
+      <h2 data-i18n="links">Σύνδεσμοι</h2>
+      <div class="links-row">
+        <a href="https://www.forensiclabs.gr/" target="_blank" rel="noopener" data-i18n="site_link">Κύριο site F.I.C.</a>
+        <a href="#latencycheck-operation" data-i18n="latency_operation_link">Περιγραφή και τρόπος λειτουργίας LatencyCheck</a>
+        <a href="#harddisktemp-operation" data-i18n="harddisk_operation_link">Περιγραφή και τρόπος λειτουργίας HardDiskTemp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="footer_note"></p>
+    <a href="#home" data-i18n="back_to_top">Επιστροφή επάνω</a>
+  </footer>
+
+  <script src="assets/js/translations.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
