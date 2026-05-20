@@ -1,0 +1,10 @@
+{
+  "version": "v17-remove-hero-github-panel",
+  "removed": [
+    "GitHub Releases hero panel",
+    "Installers + SHA256 + Changelog hero text",
+    "hero mini-grid LatencyCheck / HardDiskTemp / 31 Languages / Static Site"
+  ],
+  "layout": "hero is now single-column",
+  "run": "11_PUSH_REMOVE_HERO_GITHUB_PANEL.cmd"
+}

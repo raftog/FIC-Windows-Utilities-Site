@@ -1,0 +1,13 @@
+name = "fic-windows-utilities-counters"
+main = "cloudflare-download-counter.js"
+compatibility_date = "2026-05-20"
+
+kv_namespaces = [
+  { binding = "DOWNLOAD_STATS", id = "PUT_YOUR_KV_NAMESPACE_ID_HERE" }
+]
+
+# Example routes after DNS/Cloudflare access is recovered:
+# routes = [
+#   { pattern = "apps.forensiclabs.gr/api/*", zone_name = "forensiclabs.gr" },
+#   { pattern = "apps.forensiclabs.gr/download/*", zone_name = "forensiclabs.gr" }
+# ]

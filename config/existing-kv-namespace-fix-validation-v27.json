@@ -1,0 +1,12 @@
+{
+  "version": "v27-existing-kv-namespace-fix",
+  "problem": "KV namespace DOWNLOAD_STATS already exists but script tried to create it again and failed.",
+  "fixes": [
+    "lists existing KV namespaces before creating",
+    "uses existing DOWNLOAD_STATS id when found",
+    "handles 'already exists' create error by listing and reusing the namespace",
+    "writes real KV id into wrangler.toml",
+    "continues to Worker deploy"
+  ],
+  "run": "27_CONTINUE_WORKER_DEPLOY_USE_EXISTING_KV.cmd"
+}

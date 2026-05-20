@@ -1,0 +1,16 @@
+{
+  "version": "v13-counters",
+  "github_pages_active_counters": [
+    "LatencyCheck release asset download_count",
+    "HardDiskTemp release asset download_count",
+    "Total downloads"
+  ],
+  "worker_counters_ready": [
+    "visits total",
+    "visits by country",
+    "downloads by app",
+    "downloads by app and country"
+  ],
+  "privacy": "aggregate counters only, no IP storage",
+  "run": "07_PUSH_COUNTERS_FIX.cmd"
+}
