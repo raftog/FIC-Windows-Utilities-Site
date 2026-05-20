@@ -1,0 +1,22 @@
+{
+  "version": "v20-cloudflare-worker-activation",
+  "adds": [
+    "assets/js/worker-config.js",
+    "20_DEPLOY_CLOUDFLARE_WORKER.cmd",
+    "Deploy_Cloudflare_Worker.ps1",
+    "worker/wrangler.toml",
+    "full Worker counter backend"
+  ],
+  "worker": {
+    "name": "fic-windows-utilities-counters",
+    "kv_binding": "DOWNLOAD_STATS",
+    "routes": [
+      "/api/visit",
+      "/api/stats",
+      "/download/latencycheck",
+      "/download/harddisktemp"
+    ]
+  },
+  "site_behavior": "uses Worker for counters/downloads when worker-config.js contains URL; otherwise falls back to direct GitHub downloads",
+  "run": "20_DEPLOY_CLOUDFLARE_WORKER.cmd"
+}

@@ -1,0 +1,28 @@
+Επίσημη δημόσια ταυτότητα
+
+Όνομα site:
+F.I.C. Windows Utilities
+
+Ετικέτα κεφαλίδας:
+APPS.FORENSICLABS.GR
+
+Δοκιμαστικό URL:
+https://raftog.github.io/FIC-Windows-Utilities-Site/
+
+Μελλοντικό καθαρό URL:
+https://apps.forensiclabs.gr/
+
+Cloudflare Worker:
+fic-windows-utilities-counters
+
+Cloudflare Worker URL:
+https://fic-windows-utilities-counters.gvraftogiannis.workers.dev
+
+GitHub repository:
+raftog/FIC-Windows-Utilities-Site
+
+Σκοπός:
+Δημόσια σελίδα F.I.C. για LatencyCheck και HardDiskTemp με λήψεις, ιστορικό αλλαγών, SHA256, περιγραφή λειτουργίας και στατιστικά.
+
+Λογότυπο κεφαλίδας:
+assets/img/fic-emblem-topbar.png

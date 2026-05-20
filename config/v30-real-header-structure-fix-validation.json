@@ -1,0 +1,14 @@
+{
+  "version": "v30-real-header-structure-fix",
+  "root_cause": "CSS targeted .site-header but the HTML did not contain a .site-header wrapper; hero stayed outside blue header.",
+  "fixes": [
+    "wraps .topbar and #home.hero inside a real .site-header div",
+    "main now starts after the blue header",
+    "solid blue background is applied to the real header wrapper",
+    "blank gap below blue header via .site-header margin-bottom",
+    "buttons stay inside blue header",
+    "Worker endpoint remains configured and verified URL is set"
+  ],
+  "worker_url": "https://fic-windows-utilities-counters.gvraftogiannis.workers.dev",
+  "run": "30_PUSH_REAL_HEADER_STRUCTURE_FIX.cmd"
+}

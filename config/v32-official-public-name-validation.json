@@ -1,0 +1,17 @@
+{
+  "version": "v32-official-public-name",
+  "official_name": "F.I.C. Windows Utilities",
+  "official_domain_label": "APPS.FORENSICLABS.GR",
+  "github_pages_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "future_domain": "https://apps.forensiclabs.gr/",
+  "cloudflare_worker_name": "fic-windows-utilities-counters",
+  "cloudflare_worker_url": "https://fic-windows-utilities-counters.gvraftogiannis.workers.dev",
+  "changes": [
+    "normalizes HTML title/meta/open graph identity",
+    "adds official public identity file",
+    "updates site-config.json officialName/publicIdentity",
+    "keeps active Worker endpoint configured",
+    "adds official push/check scripts"
+  ],
+  "run": "32_PUSH_OFFICIAL_NAME.cmd"
+}

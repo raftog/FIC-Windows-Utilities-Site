@@ -1,0 +1,11 @@
+{
+  "version": "v21-cloudflare-worker-npm-notice-fix",
+  "problem": "npx/wrangler printed npm notice to stderr and PowerShell stopped with NativeCommandError",
+  "fixes": [
+    "sets PSNativeCommandUseErrorActionPreference=false where supported",
+    "Run-Wrangler temporarily uses ErrorActionPreference=Continue",
+    "captures stderr without aborting on npm notices",
+    "adds 21_CONTINUE_CLOUDFLARE_WORKER_DEPLOY.cmd"
+  ],
+  "run": "21_CONTINUE_CLOUDFLARE_WORKER_DEPLOY.cmd"
+}

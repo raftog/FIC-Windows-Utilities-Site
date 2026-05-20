@@ -1,0 +1,11 @@
+{
+  "version": "v22-cloudflare-worker-wrangler-arguments-fix",
+  "problem": "Wrangler printed the general help because subcommands were not passed correctly to npx wrangler.",
+  "fixes": [
+    "renamed Run-Wrangler parameter from Args to WranglerArgs",
+    "uses explicit command array @('--yes','wrangler') + WranglerArgs",
+    "uses named -WranglerArgs calls for whoami/login/kv/deploy",
+    "adds 22_CONTINUE_CLOUDFLARE_WORKER_DEPLOY.cmd"
+  ],
+  "run": "22_CONTINUE_CLOUDFLARE_WORKER_DEPLOY.cmd"
+}

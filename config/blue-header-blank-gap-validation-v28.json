@@ -1,0 +1,11 @@
+{
+  "version": "v28-blue-header-blank-gap-fix",
+  "requested": "άσε κενό κάτω από το μπλε πλαίσιο",
+  "changes": [
+    "site-header owns the blue background",
+    "buttons remain inside the blue header",
+    "added clear blank gap below the blue header via margin-bottom",
+    "secondary button is visible on blue background"
+  ],
+  "run": "28_PUSH_BLUE_HEADER_BLANK_GAP_FIX.cmd"
+}

@@ -1,0 +1,15 @@
+{
+  "version": "v34-fic-emblem-header",
+  "requested": "place the provided F.I.C. image in the top header area",
+  "added_assets": [
+    "assets/img/fic-emblem.png",
+    "assets/img/fic-emblem-topbar.png"
+  ],
+  "changes": [
+    "replaces the previous FIC square brand mark with the provided circular F.I.C. emblem",
+    "keeps official name F.I.C. Windows Utilities",
+    "keeps custom domain apps.forensiclabs.gr",
+    "keeps active Worker endpoint"
+  ],
+  "run": "34_PUSH_FIC_EMBLEM_HEADER.cmd"
+}

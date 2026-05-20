@@ -1,0 +1,16 @@
+{
+  "version": "v29-definitive-header-and-worker-check",
+  "header_fix": [
+    "solid blue site-header forced with !important",
+    "hero text/buttons stay inside blue",
+    "blank gap below blue via header margin-bottom",
+    "no opacity/filter/faded text",
+    "secondary button visible on blue"
+  ],
+  "worker": [
+    "worker-config.js points to https://fic-windows-utilities-counters.gvraftogiannis.workers.dev",
+    "added 29_CHECK_WORKER_ONLY.cmd",
+    "added 29_CHECK_WORKER_AND_PUSH_HEADER_FIX.cmd"
+  ],
+  "run": "29_CHECK_WORKER_AND_PUSH_HEADER_FIX.cmd"
+}

@@ -1,0 +1,14 @@
+{
+  "version": "v33-apps-forensiclabs-custom-domain",
+  "canonical_url": "https://apps.forensiclabs.gr/",
+  "cname": "apps.forensiclabs.gr",
+  "dns_required": {
+    "type": "CNAME",
+    "name": "apps",
+    "target": "raftog.github.io",
+    "proxy_status_initial": "DNS only"
+  },
+  "github_pages_custom_domain": "apps.forensiclabs.gr",
+  "worker_url": "https://fic-windows-utilities-counters.gvraftogiannis.workers.dev",
+  "run": "33_PUSH_APPS_FORENSICLABS_CUSTOM_DOMAIN.cmd"
+}

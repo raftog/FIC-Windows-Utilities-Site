@@ -1,0 +1,39 @@
+{
+  "siteName": "F.I.C. Windows Utilities",
+  "mainSite": "https://www.forensiclabs.gr/",
+  "appsDomainSuggestion": "https://apps.forensiclabs.gr/",
+  "githubRepos": {
+    "latencycheck": "raftog/LatencyCheck-Updates",
+    "harddisktemp": "raftog/HardDiskTemp-Updates"
+  },
+  "releaseAssetNames": {
+    "latencycheck": "LatencyCheck_Setup_Professional_GUI.exe",
+    "harddisktemp": "Build_HardDiskTemp_Install.exe"
+  },
+  "downloadRedirects": {
+    "latencycheck": "https://github.com/raftog/LatencyCheck-Updates/releases/latest/download/LatencyCheck_Setup_Professional_GUI.exe",
+    "harddisktemp": "https://github.com/raftog/HardDiskTemp-Updates/releases/latest/download/Build_HardDiskTemp_Install.exe"
+  },
+  "reciprocalLinks": {
+    "mainToApps": "https://apps.forensiclabs.gr/",
+    "appsToMain": "https://www.forensiclabs.gr/",
+    "mainSiteSnippetFolder": "forensiclabs-main-site-link",
+    "mainToAppsStatisticsRelative": "FIC_Windows_Utilities_Site/index.html#statistics",
+    "mainToAppsStatisticsAbsolute": "https://apps.forensiclabs.gr/#statistics"
+  },
+  "downloadMode": "direct-github-release-links-for-github-pages-test",
+  "downloadCounterModeLater": "Cloudflare Worker /download routes after DNS access is recovered",
+  "officialName": "F.I.C. Windows Utilities",
+  "officialDomainLabel": "APPS.FORENSICLABS.GR",
+  "githubPagesUrl": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "cloudflareWorkerName": "fic-windows-utilities-counters",
+  "cloudflareWorkerUrl": "https://fic-windows-utilities-counters.gvraftogiannis.workers.dev",
+  "publicIdentity": {
+    "siteName": "F.I.C. Windows Utilities",
+    "canonicalUrl": "https://apps.forensiclabs.gr/",
+    "fallbackGithubPagesUrl": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+    "workerUrl": "https://fic-windows-utilities-counters.gvraftogiannis.workers.dev"
+  },
+  "canonicalUrl": "https://apps.forensiclabs.gr/",
+  "customDomain": "apps.forensiclabs.gr"
+}
