@@ -1,0 +1,13 @@
+{
+  "version": "v9-remote-contains-work-fix",
+  "fixes": [
+    "handles push rejection fetch first",
+    "fetches origin/main and merges unrelated histories with local site",
+    "uses force-with-lease only as final recovery for this new site repo",
+    "then enables or repairs GitHub Pages"
+  ],
+  "run": "03_REPAIR_ENABLE_GITHUB_PAGES.cmd",
+  "repo": "raftog/FIC-Windows-Utilities-Site",
+  "site_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "statistics_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/#statistics"
+}

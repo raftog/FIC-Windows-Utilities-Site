@@ -1,0 +1,11 @@
+{
+  "version": "v14-anchor-operation-fix",
+  "problem": "Internal operation links existed but their target sections were missing after v13 statistics replacement.",
+  "fix": "Restored #program-operation section with #latencycheck-operation and #harddisktemp-operation targets.",
+  "targets_present": {
+    "program-operation": true,
+    "latencycheck-operation": true,
+    "harddisktemp-operation": true
+  },
+  "run": "08_PUSH_OPERATION_ANCHOR_FIX.cmd"
+}
