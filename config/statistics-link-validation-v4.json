@@ -1,0 +1,18 @@
+{
+  "version": "v4",
+  "added": "direct statistics backlink snippets for the existing forensiclabs.gr site",
+  "exact_requested_href": "FIC_Windows_Utilities_Site/index.html#statistics",
+  "absolute_alternative_href": "https://apps.forensiclabs.gr/#statistics",
+  "recommended_placement": "existing left column Visitors / Επισκέπτες box",
+  "style": {
+    "color": "#005CFF",
+    "hover": "#00A6FF",
+    "underline": true
+  },
+  "files": [
+    "forensiclabs-main-site-link/STATISTICS_LINK_RELATIVE_FOR_MAIN_SITE.html",
+    "forensiclabs-main-site-link/STATISTICS_LINK_ABSOLUTE_FOR_MAIN_SITE.html",
+    "forensiclabs-main-site-link/VISITORS_BOX_APPS_STATISTICS_LINK.html",
+    "forensiclabs-main-site-link/MENU_ITEM_APPS_STATISTICS_LINK.html"
+  ]
+}
