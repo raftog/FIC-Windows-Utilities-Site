@@ -1,0 +1,11 @@
+{
+  "version": "v25-ascii-safe-cloudflare-start",
+  "problem": "Start_Cloudflare_Login_Deploy.ps1 failed to parse because Greek/UTF-8 text was corrupted by Windows PowerShell encoding.",
+  "fixes": [
+    "rewrote Start_Cloudflare_Login_Deploy.ps1 as ASCII-only",
+    "rewrote START HERE CMD as ASCII-only",
+    "kept normal browser login flow; no API token in normal path",
+    "added 00_ONLY_CLOUDFLARE_LOGIN_TEST.cmd"
+  ],
+  "run": "00_START_HERE_CLOUDFLARE_LOGIN_AND_DEPLOY.cmd"
+}
