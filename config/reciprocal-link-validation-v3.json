@@ -1,0 +1,16 @@
+{
+  "version": "v3",
+  "main_site": "https://www.forensiclabs.gr/",
+  "apps_site": "https://apps.forensiclabs.gr/",
+  "added_files": [
+    "forensiclabs-main-site-link/ADD_APPS_LINK_TO_FORENSICLABS_GR.html",
+    "forensiclabs-main-site-link/MENU_ITEM_APPS_LINK.html",
+    "forensiclabs-main-site-link/FOOTER_APPS_LINK.html",
+    "forensiclabs-main-site-link/README_ADD_LINK_TO_MAIN_SITE.md"
+  ],
+  "link_style": {
+    "color": "#005CFF",
+    "hover": "#00A6FF",
+    "underline": true
+  }
+}

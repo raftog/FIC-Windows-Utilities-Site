@@ -1,0 +1,24 @@
+{
+  "siteName": "F.I.C. Windows Utilities",
+  "mainSite": "https://www.forensiclabs.gr/",
+  "appsDomainSuggestion": "https://apps.forensiclabs.gr/",
+  "githubRepos": {
+    "latencycheck": "raftog/LatencyCheck-Updates",
+    "harddisktemp": "raftog/HardDiskTemp-Updates"
+  },
+  "releaseAssetNames": {
+    "latencycheck": "LatencyCheck_Setup_Professional_GUI.exe",
+    "harddisktemp": "Build_HardDiskTemp_Install.exe"
+  },
+  "downloadRedirects": {
+    "latencycheck": "/download/latencycheck",
+    "harddisktemp": "/download/harddisktemp"
+  },
+  "reciprocalLinks": {
+    "mainToApps": "https://apps.forensiclabs.gr/",
+    "appsToMain": "https://www.forensiclabs.gr/",
+    "mainSiteSnippetFolder": "forensiclabs-main-site-link",
+    "mainToAppsStatisticsRelative": "FIC_Windows_Utilities_Site/index.html#statistics",
+    "mainToAppsStatisticsAbsolute": "https://apps.forensiclabs.gr/#statistics"
+  }
+}
