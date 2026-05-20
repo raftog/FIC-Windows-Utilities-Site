@@ -1,0 +1,11 @@
+{
+  "version": "v23-cloudflare-auth-detection-fix",
+  "problem": "wrangler whoami printed 'You are not authenticated' but script continued to KV creation without opening login.",
+  "fixes": [
+    "parses whoami output for not authenticated text",
+    "runs wrangler login when needed",
+    "verifies login after browser authorization",
+    "adds API token fallback CMD"
+  ],
+  "run": "23_CONTINUE_CLOUDFLARE_WORKER_DEPLOY.cmd"
+}

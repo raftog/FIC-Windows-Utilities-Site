@@ -1,0 +1,9 @@
+{
+  "version": "v10-download-link-fix",
+  "problem": "GitHub Pages returned 404 because download buttons used /download/latencycheck and /download/harddisktemp, which require a Cloudflare Worker route.",
+  "fix": "Buttons now use direct GitHub Releases latest/download URLs for the GitHub Pages test site, with asset browser_download_url preferred when API metadata loads.",
+  "latencycheck_download": "https://github.com/raftog/LatencyCheck-Updates/releases/latest/download/LatencyCheck_Setup_Professional_GUI.exe",
+  "harddisktemp_download": "https://github.com/raftog/HardDiskTemp-Updates/releases/latest/download/Build_HardDiskTemp_Install.exe",
+  "worker_later": "Restore /download routes only after Cloudflare Worker is deployed.",
+  "run": "04_PUSH_DOWNLOAD_LINK_FIX.cmd or 03_REPAIR_ENABLE_GITHUB_PAGES.cmd"
+}
