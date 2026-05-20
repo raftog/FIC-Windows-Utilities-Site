@@ -1,0 +1,13 @@
+{
+  "version": "v8-pages-404-repair",
+  "fixes": [
+    "adds dedicated GitHub Pages 404 repair script",
+    "uses JSON input for GitHub Pages API POST/PUT",
+    "ensures repo exists, commit exists, and main branch is pushed",
+    "opens final GitHub Pages URL"
+  ],
+  "run": "03_REPAIR_ENABLE_GITHUB_PAGES.cmd",
+  "repo": "raftog/FIC-Windows-Utilities-Site",
+  "site_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "statistics_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/#statistics"
+}

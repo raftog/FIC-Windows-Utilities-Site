@@ -1,0 +1,8 @@
+{
+  "version": "v11-internal-changelog",
+  "problem": "Changelog buttons opened the public GitHub release page, exposing visitors to the GitHub UI and automatic source archives.",
+  "fix": "Changelog buttons now point to an internal #changelog section in the app site; release notes are displayed inside the site.",
+  "technical_release_pages": "kept as secondary links only",
+  "download_buttons": "remain direct GitHub release asset downloads",
+  "run": "05_PUSH_INTERNAL_CHANGELOG_FIX.cmd or 03_REPAIR_ENABLE_GITHUB_PAGES.cmd"
+}
