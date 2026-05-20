@@ -1,0 +1,13 @@
+{
+  "version": "v7-github-pages-ready-git-identity-fix",
+  "fixes": [
+    "set local git user.name and user.email before commit",
+    "handle gh repo view repository-not-found without aborting",
+    "create repo if missing",
+    "preserve v6 Git auto-detect/install behavior"
+  ],
+  "repo": "raftog/FIC-Windows-Utilities-Site",
+  "test_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "statistics_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/#statistics",
+  "root_contains_index_html": true
+}

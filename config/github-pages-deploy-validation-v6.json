@@ -1,0 +1,13 @@
+{
+  "version": "v6-github-pages-ready-auto-git",
+  "fix": "auto-detect or install Git when git.exe is not in PATH",
+  "repo": "raftog/FIC-Windows-Utilities-Site",
+  "test_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/",
+  "statistics_url": "https://raftog.github.io/FIC-Windows-Utilities-Site/#statistics",
+  "root_contains_index_html": true,
+  "new_scripts": [
+    "00_INSTALL_GIT_IF_NEEDED.cmd",
+    "01_DEPLOY_TO_GITHUB_PAGES.cmd",
+    "Deploy_GitHub_Pages.ps1"
+  ]
+}
