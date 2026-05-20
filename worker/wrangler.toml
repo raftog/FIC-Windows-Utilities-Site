@@ -1,0 +1,9 @@
+name = "fic-windows-utilities-counters"
+main = "cloudflare-download-counter.js"
+compatibility_date = "2026-05-20"
+workers_dev = true
+
+# The deploy script will replace PUT_KV_NAMESPACE_ID_HERE with the real KV namespace id.
+[[kv_namespaces]]
+binding = "DOWNLOAD_STATS"
+id = "PUT_KV_NAMESPACE_ID_HERE"

@@ -1,0 +1,12 @@
+{
+  "version": "v26-workers-dev-onboarding-aware",
+  "problem": "Cloudflare Worker deploy failed because no workers.dev subdomain was registered for the account.",
+  "fixes": [
+    "Deploy-Worker detects workers.dev onboarding requirement",
+    "opens Cloudflare Workers onboarding URL",
+    "waits for user to register workers.dev subdomain",
+    "retries Worker deploy automatically",
+    "adds 26_REGISTER_WORKERS_DEV_AND_DEPLOY.cmd"
+  ],
+  "run": "26_REGISTER_WORKERS_DEV_AND_DEPLOY.cmd"
+}

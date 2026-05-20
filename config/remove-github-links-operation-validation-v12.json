@@ -1,0 +1,13 @@
+{
+  "version": "v12-remove-visible-github-links-add-operation",
+  "removed_visible_links": [
+    "LatencyCheck GitHub",
+    "HardDiskTemp GitHub"
+  ],
+  "added_internal_links": [
+    "#latencycheck-operation",
+    "#harddisktemp-operation"
+  ],
+  "added_section": "#program-operation",
+  "run": "06_PUSH_REMOVE_GITHUB_LINKS_ADD_OPERATION.cmd"
+}

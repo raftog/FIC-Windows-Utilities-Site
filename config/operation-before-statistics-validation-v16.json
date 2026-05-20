@@ -1,0 +1,12 @@
+{
+  "version": "v16-operation-before-statistics",
+  "requested_change": "Περιγραφή και τρόπος λειτουργίας πάνω από τα στατιστικά",
+  "operation_section_before_statistics": true,
+  "targets_present": {
+    "program-operation": true,
+    "latencycheck-operation": true,
+    "harddisktemp-operation": true
+  },
+  "github_changelog_visible_links_removed": true,
+  "run": "10_PUSH_OPERATION_BEFORE_STATISTICS.cmd"
+}

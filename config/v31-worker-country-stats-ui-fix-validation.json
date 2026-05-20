@@ -1,0 +1,12 @@
+{
+  "version": "v31-worker-country-stats-ui-fix",
+  "problem": "UI showed 'Enabled with Worker' even though Worker was active; zero download country rows were being misrepresented.",
+  "fixes": [
+    "Worker URL fixed to active workers.dev endpoint",
+    "country stats table now shows visits by country immediately",
+    "empty download country state says Worker active but no download data yet",
+    "download buttons route through Worker when Worker config exists",
+    "added test script for download through Worker"
+  ],
+  "run": "31_CHECK_WORKER_AND_PUSH_STATS_FIX.cmd"
+}
