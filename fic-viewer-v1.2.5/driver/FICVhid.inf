@@ -1,11 +1,11 @@
-; FIC Virtual Input V1.2.5 - test build
+; FIC Virtual Input V1.2.6 - test build
 [Version]
 Signature="$WINDOWS NT$"
 Class=HIDClass
 ClassGuid={745A17A0-74D3-11D0-B6FE-00A0C90F57DA}
 Provider=%Provider%
 CatalogFile=FICVhid.cat
-DriverVer=10/01/2026,1.2.5.0
+DriverVer=10/01/2026,1.2.6.0
 PnpLockdown=1
 
 [DestinationDirs]
@@ -24,13 +24,19 @@ FICVhid.sys=1
 [Models.NTamd64]
 %DeviceDesc%=FICVhid.Install,Root\FICVhid
 
-[FICVhid.Install]
+[FICVhid.Install.NT]
 CopyFiles=FICVhid.CopyFiles
+
+[FICVhid.Install.NT.HW]
+AddReg=FICVhid.VhfFilter
+
+[FICVhid.VhfFilter]
+HKR,,"LowerFilters",0x00010000,"vhf"
 
 [FICVhid.CopyFiles]
 FICVhid.sys
 
-[FICVhid.Install.Services]
+[FICVhid.Install.NT.Services]
 AddService=FICVhid,0x00000002,FICVhid.Service
 
 [FICVhid.Service]
