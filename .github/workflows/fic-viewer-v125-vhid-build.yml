@@ -38,6 +38,15 @@ jobs:
           Copy-Item .\umdf\out\FICVhidUm.dll $pkg -Force
           Copy-Item .\umdf\FICVhidUm.inf $pkg -Force
           Copy-Item .\umdf\MS-PL-NOTICE.txt $pkg -Force
+          $srcDir = Join-Path $pkg 'source'
+          New-Item -ItemType Directory -Force $srcDir | Out-Null
+          Copy-Item .\umdf\FICVhidUm.c $srcDir -Force
+          Copy-Item .\umdf\FICVhidUm.h $srcDir -Force
+          Copy-Item .\umdf\FICVhidCommon.h $srcDir -Force
+          Copy-Item .\umdf\util.c $srcDir -Force
+          Copy-Item .\umdf\FICVhidUm.inf $srcDir -Force
+          Copy-Item .\umdf\FICVhidUm.vcxproj $srcDir -Force
+          Copy-Item .\umdf\MS-PL-NOTICE.txt $srcDir -Force
 
           $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
           if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
