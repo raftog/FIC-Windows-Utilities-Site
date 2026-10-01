@@ -17,45 +17,46 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Clone Microsoft driver samples
+      - name: Restore WDK NuGet packages
         shell: pwsh
-        run: |
-          git clone --depth 1 https://github.com/microsoft/Windows-driver-samples.git driver-samples
-
-      - name: Restore official WDK NuGet packages
-        shell: pwsh
-        working-directory: driver-samples
+        working-directory: fic-viewer-v1.2.5
         run: |
           nuget restore .\packages.config -PackagesDirectory .\packages
 
-      - name: Patch probe project to compile DLL only
+      - name: Build FIC UMDF2 virtual HID DLL x64
         shell: pwsh
+        working-directory: fic-viewer-v1.2.5
         run: |
-          $proj = '.\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj'
-          $xml = Get-Content -LiteralPath $proj -Raw
-          $xml = $xml -replace '<Inf Exclude="@\(Inf\)" Include="\*\.inx" />',''
-          $xml = $xml -replace '<FilesToPackage Include="\$\(TargetPath\)" Condition="[^"]*" />',''
-          Set-Content -LiteralPath $proj -Value $xml -Encoding UTF8
+          msbuild .\umdf\FICVhidUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off /m /v:minimal
 
-      - name: Build official UMDF2 virtual HID DLL x64
+      - name: Build driver package catalog
         shell: pwsh
+        working-directory: fic-viewer-v1.2.5
         run: |
-          msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off /m /v:minimal
+          $pkg = Join-Path $PWD 'package'
+          New-Item -ItemType Directory -Force $pkg | Out-Null
+          Copy-Item .\umdf\out\FICVhidUm.dll $pkg -Force
+          Copy-Item .\umdf\FICVhidUm.inf $pkg -Force
+          Copy-Item .\umdf\MS-PL-NOTICE.txt $pkg -Force
 
-      - name: Collect UMDF outputs
-        if: always()
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force artifact | Out-Null
-          Get-ChildItem .\driver-samples\hid\vhidmini2 -Recurse -File |
-            Where-Object { $_.Name -match '^VhidminiUm\.(dll|pdb)$' -or $_.Name -eq 'VhidminiUm.inx' } |
-            Copy-Item -Destination artifact -Force
-          Get-ChildItem artifact -ErrorAction SilentlyContinue
+          $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
+          if (-not $inf2cat) {
+            Write-Host 'Available WDK executables:'
+            Get-ChildItem .\packages -Recurse -File -Filter *.exe |
+              Where-Object { $_.Name -match 'inf|cat|sign|stamp' } |
+              Select-Object FullName
+            throw 'Inf2Cat.exe not found in restored WDK packages'
+          }
 
-      - name: Upload UMDF artifact
-        if: always()
+          Write-Host "Inf2Cat: $($inf2cat.FullName)"
+          & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          Get-ChildItem $pkg | Select-Object Name,Length
+
+      - name: Upload UMDF package
         uses: actions/upload-artifact@v4
         with:
-          name: fic-v125-vhid-umdf-probe
-          path: artifact
-          if-no-files-found: warn
+          name: fic-viewer-v1.2.5-umdf-hid
+          path: fic-viewer-v1.2.5/package
+          if-no-files-found: error
