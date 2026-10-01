@@ -1,6 +1,3 @@
-#define UNICODE
-#define _UNICODE
-
 #include <windows.h>
 #include <setupapi.h>
 #include <newdev.h>
@@ -92,7 +89,7 @@ static BOOL HasHardwareId(const wchar_t* wanted)
 static BOOL CreateRootDevice(const wchar_t* infPath, const wchar_t* hardwareId)
 {
     GUID classGuid = {};
-    wchar_t className[MAX_CLASS_NAME_LEN] = {};
+    wchar_t className[256] = {};
 
     if (!SetupDiGetINFClassW(
             infPath,
