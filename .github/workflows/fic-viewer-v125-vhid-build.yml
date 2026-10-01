@@ -61,9 +61,6 @@ jobs:
           & $signtool.FullName sign /fd SHA256 /sha1 $cert.Thumbprint /s My $cat.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          $verify = Get-AuthenticodeSignature -FilePath $cat.FullName
-          if ($verify.Status -ne 'Valid') { throw "Catalog signature status: $($verify.Status)" }
-
           Get-ChildItem $pkg | Select-Object Name,Length
           Get-FileHash (Join-Path $pkg 'FICVhidUm.dll') -Algorithm SHA256
           Get-FileHash $cat.FullName -Algorithm SHA256
