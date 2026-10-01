@@ -31,7 +31,30 @@ jobs:
       - name: Build official UMDF2 virtual HID sample x64
         shell: pwsh
         run: |
-          $stamp = Get-ChildItem .\driver-samples\packages -Recurse -File -Filter stampinf.exe | Select-Object -First 1
+          $stamp = Get-ChildItem .\driver-samples\packages\Microsoft.Windows.WDK.x64.* -Recurse -File -Filter stampinf.exe | Where-Object { $_.FullName -match '\\x86\\stampinf\.exe
+          if (-not $stamp) { throw "stampinf.exe not found in restored WDK" }
+          $env:Path = "$($stamp.Directory.FullName);$env:Path"
+          Write-Host "Using WDK tools from $($stamp.Directory.FullName)"
+          msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
+
+      - name: Collect UMDF outputs
+        if: always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifact | Out-Null
+          Get-ChildItem .\driver-samples\hid\vhidmini2 -Recurse -File |
+            Where-Object { $_.Name -match '^VhidminiUm\.(dll|inf|cat|pdb)$' } |
+            Copy-Item -Destination artifact -Force
+          Get-ChildItem artifact -ErrorAction SilentlyContinue
+
+      - name: Upload UMDF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fic-v125-vhid-umdf-probe
+          path: artifact
+          if-no-files-found: warn
+ } | Select-Object -First 1
           if (-not $stamp) { throw "stampinf.exe not found in restored WDK" }
           $env:Path = "$($stamp.Directory.FullName);$env:Path"
           Write-Host "Using WDK tools from $($stamp.Directory.FullName)"
