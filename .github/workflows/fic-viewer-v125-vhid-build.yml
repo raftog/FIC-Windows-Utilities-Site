@@ -8,42 +8,45 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 30
     steps:
       - name: Checkout build branch
         uses: actions/checkout@v4
 
-      - name: Install WDK 26100
-        shell: pwsh
-        run: |
-          winget install --id Microsoft.WindowsWDK.10.0.26100 -e --silent --accept-package-agreements --accept-source-agreements
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
       - name: Clone Microsoft driver samples
         shell: pwsh
         run: |
           git clone --depth 1 https://github.com/microsoft/Windows-driver-samples.git driver-samples
 
-      - name: Build UMDF2 virtual HID sample x64
+      - name: Restore official WDK NuGet packages
+        shell: pwsh
+        working-directory: driver-samples
+        run: |
+          nuget restore .\packages.config -PackagesDirectory .\packages
+
+      - name: Build official UMDF2 virtual HID sample x64
         shell: pwsh
         run: |
-          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $vs = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
-          $msbuild = Join-Path $vs "MSBuild\Current\Bin\MSBuild.exe"
-          & $msbuild "driver-samples\hid\vhidmini2\vhidmini2.sln" /m /t:VhidminiUm /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          Get-ChildItem -Recurse "driver-samples\hid\vhidmini2" | Where-Object { $_.Extension -in '.dll','.inf','.cat','.pdb' } | Select-Object FullName,Length
+          msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
 
-      - name: Collect artifacts
+      - name: Collect UMDF outputs
+        if: always()
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force artifact | Out-Null
-          Get-ChildItem -Recurse "driver-samples\hid\vhidmini2" -File | Where-Object { $_.Extension -in '.dll','.inf','.cat','.pdb' } | ForEach-Object {
-            Copy-Item $_.FullName -Destination artifact -Force
-          }
+          Get-ChildItem .\driver-samples\hid\vhidmini2 -Recurse -File |
+            Where-Object { $_.Name -match '^VhidminiUm\.(dll|inf|cat|pdb)$' } |
+            Copy-Item -Destination artifact -Force
+          Get-ChildItem artifact -ErrorAction SilentlyContinue
 
-      - name: Upload artifacts
+      - name: Upload UMDF artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: fic-v125-vhid-umdf-probe
           path: artifact
-          if-no-files-found: error
+          if-no-files-found: warn
