@@ -27,19 +27,72 @@ jobs:
         run: |
           msbuild .\driver\FICVhid.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
 
-      - name: Collect outputs
-        if: always()
+      - name: Build and test-sign driver package
         shell: pwsh
+        working-directory: fic-viewer-v1.2.5
         run: |
-          New-Item -ItemType Directory -Force artifact | Out-Null
-          Get-ChildItem .\fic-viewer-v1.2.5 -Recurse -File -Include FICVhid.sys,FICVhid.inf,FICVhid.cat,FICVhid.pdb |
-            Copy-Item -Destination artifact -Force
-          Get-ChildItem artifact -ErrorAction SilentlyContinue
+          $ErrorActionPreference = 'Stop'
+          $pkg = Join-Path $PWD 'package-vhf'
+          New-Item -ItemType Directory -Force $pkg | Out-Null
+
+          Copy-Item .\driver\out\FICVhid.sys $pkg -Force
+          Copy-Item .\driver\FICVhid.inf $pkg -Force
+
+          $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
+          if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
+
+          Write-Host "Inf2Cat: $($inf2cat.FullName)"
+          & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $cert = New-SelfSignedCertificate `
+            -Type CodeSigningCert `
+            -Subject 'CN=FIC Viewer V1.2.5 Test Driver' `
+            -FriendlyName 'FIC Viewer V1.2.5 Test Driver' `
+            -CertStoreLocation 'Cert:\CurrentUser\My' `
+            -KeyAlgorithm RSA `
+            -KeyLength 2048 `
+            -HashAlgorithm SHA256 `
+            -NotAfter (Get-Date).AddYears(2)
+
+          Export-Certificate -Cert $cert -FilePath (Join-Path $pkg 'FICViewer-V1.2.5-TestDriver.cer') | Out-Null
+
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -File -Filter signtool.exe |
+            Where-Object { $_.FullName -match '\\x64\\signtool\.exe$' } |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1
+          if (-not $signtool) { throw 'signtool.exe x64 not found' }
+
+          Write-Host "SignTool: $($signtool.FullName)"
+
+          foreach ($file in @('FICVhid.sys','FICVhid.cat')) {
+            $path = Join-Path $pkg $file
+            & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $path
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            & $signtool.FullName verify /v /pa $path
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+          @'
+FIC Viewer V1.2.5 VHF test package
+
+This package is TEST-SIGNED for development only.
+It does not contain a private key.
+
+Target test machine:
+1. Enable Windows Test Mode before installing this driver.
+2. Import FICViewer-V1.2.5-TestDriver.cer into LocalMachine Trusted Root Certification Authorities and Trusted Publishers.
+3. Install FICVhid.inf.
+4. The driver exposes \\.\FICVirtualInput and creates a VHF keyboard + absolute mouse.
+
+Production deployment requires Microsoft driver signing.
+'@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'TESTING-README.txt')
+
+          Get-ChildItem $pkg | Select-Object Name,Length
 
       - name: Upload driver artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fic-viewer-v1.2.5-vhid
-          path: artifact
-          if-no-files-found: warn
+          name: fic-viewer-v1.2.5-vhid-test-signed
+          path: fic-viewer-v1.2.5/package-vhf
+          if-no-files-found: error
