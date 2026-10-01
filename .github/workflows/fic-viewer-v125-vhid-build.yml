@@ -1,6 +1,9 @@
 name: FIC Viewer V1.2.5 UMDF HID Build
 
 on:
+  push:
+    branches:
+      - fic-viewer-v1.2.5-build
   workflow_dispatch:
 
 jobs:
