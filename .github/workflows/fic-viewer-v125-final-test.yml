@@ -46,6 +46,9 @@ jobs:
             }
           }
 
+          Remove-Item (Join-Path $pkg 'BUILD-READY-README.txt') -Force -ErrorAction SilentlyContinue
+          Remove-Item (Join-Path $pkg 'SHA256.txt') -Force -ErrorAction SilentlyContinue
+
           Get-ChildItem $pkg | Select-Object Name,Length
 
       - name: Compile installer helper and finalize test signing
@@ -61,7 +64,7 @@ jobs:
           $devcmd = Join-Path $vs 'Common7\Tools\VsDevCmd.bat'
           $installerSource = Join-Path $PWD 'fic-viewer-v1.2.5\installer\FICVhidInstall.cpp'
           $installerExe = Join-Path $pkg 'FICVhidInstall.exe'
-          $compile = "`"$devcmd`" -no_logo -arch=x64 -host_arch=x64 && cl.exe /nologo /O2 /EHsc /DUNICODE /D_UNICODE `"$installerSource`" /link /nologo setupapi.lib newdev.lib /out:`"$installerExe`""
+          $compile = "`"$devcmd`" -no_logo -arch=x64 -host_arch=x64 && cl.exe /nologo /O2 /MT /EHsc /DUNICODE /D_UNICODE `"$installerSource`" /link /nologo setupapi.lib newdev.lib /out:`"$installerExe`""
           & $env:ComSpec /d /s /c $compile
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
@@ -113,7 +116,7 @@ jobs:
             'fltmc >nul 2>&1',
             'if errorlevel 1 (',
             '  echo Requesting administrator rights...',
-            '  powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath ''''%~f0'''' -Verb RunAs"',
+            "            '  powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Start-Process -FilePath ''%~f0'' -Verb RunAs\"',"
             '  exit /b',
             ')',
             '',
