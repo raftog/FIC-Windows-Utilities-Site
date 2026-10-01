@@ -1,0 +1,48 @@
+; FIC Virtual Input V1.2.5 - test build
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745A17A0-74D3-11D0-B6FE-00A0C90F57DA}
+Provider=%Provider%
+CatalogFile=FICVhid.cat
+DriverVer=10/01/2026,1.2.5.0
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir=12
+FICVhid.CopyFiles=12
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+FICVhid.sys=1
+
+[Manufacturer]
+%Manufacturer%=Models,NTamd64
+
+[Models.NTamd64]
+%DeviceDesc%=FICVhid.Install,Root\FICVhid
+
+[FICVhid.Install]
+CopyFiles=FICVhid.CopyFiles
+
+[FICVhid.CopyFiles]
+FICVhid.sys
+
+[FICVhid.Install.Services]
+AddService=FICVhid,0x00000002,FICVhid.Service
+
+[FICVhid.Service]
+DisplayName=%ServiceDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\FICVhid.sys
+
+[Strings]
+Provider="FIC Viewer"
+Manufacturer="FIC Viewer"
+DiskName="FIC Viewer Virtual Input Driver"
+DeviceDesc="FIC Viewer Virtual HID Input"
+ServiceDesc="FIC Viewer Virtual HID Input Driver"
