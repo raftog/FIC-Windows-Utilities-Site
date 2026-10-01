@@ -29,7 +29,7 @@ jobs:
         run: |
           msbuild .\umdf\FICVhidUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off /m /v:minimal
 
-      - name: Build driver package catalog
+      - name: Build and sign driver package
         shell: pwsh
         working-directory: fic-viewer-v1.2.5
         run: |
@@ -40,19 +40,31 @@ jobs:
           Copy-Item .\umdf\MS-PL-NOTICE.txt $pkg -Force
 
           $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
-          if (-not $inf2cat) {
-            Write-Host 'Available WDK executables:'
-            Get-ChildItem .\packages -Recurse -File -Filter *.exe |
-              Where-Object { $_.Name -match 'inf|cat|sign|stamp' } |
-              Select-Object FullName
-            throw 'Inf2Cat.exe not found in restored WDK packages'
-          }
+          if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
 
-          Write-Host "Inf2Cat: $($inf2cat.FullName)"
           & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=FIC Viewer Virtual HID Driver Signing' -FriendlyName 'FIC Viewer Virtual HID Driver Signing' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddYears(10)
+          Export-Certificate -Cert $cert -FilePath (Join-Path $pkg 'FICVhid-DriverSigning.cer') | Out-Null
+
+          $signtool = Get-ChildItem .\packages -Recurse -File -Filter signtool.exe | Where-Object { $_.FullName -match '\\x64\\' } | Select-Object -First 1
+          if (-not $signtool) { $signtool = Get-ChildItem .\packages -Recurse -File -Filter signtool.exe | Select-Object -First 1 }
+          if (-not $signtool) { throw 'signtool.exe not found in restored WDK packages' }
+
+          $cat = Get-ChildItem $pkg -File -Filter *.cat | Select-Object -First 1
+          if (-not $cat) { throw 'Catalog was not generated' }
+
+          & $signtool.FullName sign /fd SHA256 /sha1 $cert.Thumbprint /s My $cat.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $signtool.FullName verify /pa /v $cat.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
           Get-ChildItem $pkg | Select-Object Name,Length
+          Get-FileHash (Join-Path $pkg 'FICVhidUm.dll') -Algorithm SHA256
+          Get-FileHash $cat.FullName -Algorithm SHA256
+          Write-Host "Driver catalog signer thumbprint: $($cert.Thumbprint)"
 
       - name: Upload UMDF package
         uses: actions/upload-artifact@v4
