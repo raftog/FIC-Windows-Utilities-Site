@@ -27,7 +27,7 @@ typedef struct _DEVICE_CONTEXT {
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, FicGetContext)
 
-static const UCHAR g_ReportDescriptor[] = {
+static UCHAR g_ReportDescriptor[] = {
     /* Keyboard, Report ID 1 */
     0x05,0x01, 0x09,0x06, 0xA1,0x01, 0x85,0x01,
     0x05,0x07, 0x19,0xE0, 0x29,0xE7, 0x15,0x00, 0x25,0x01,
@@ -172,10 +172,9 @@ NTSTATUS FicEvtDeviceAdd(WDFDRIVER Driver, PWDFDEVICE_INIT DeviceInit)
         sizeof(g_ReportDescriptor),
         g_ReportDescriptor);
 
-    vhfConfig.HidDeviceAttributes.Size = sizeof(HID_DEVICE_ATTRIBUTES);
-    vhfConfig.HidDeviceAttributes.VendorID = 0xF1C0;
-    vhfConfig.HidDeviceAttributes.ProductID = 0x0125;
-    vhfConfig.HidDeviceAttributes.VersionNumber = 0x0125;
+    vhfConfig.VendorID = 0xF1C0;
+    vhfConfig.ProductID = 0x0125;
+    vhfConfig.VersionNumber = 0x0125;
 
     status = VhfCreate(&vhfConfig, &ctx->Vhf);
     if (!NT_SUCCESS(status)) return status;
