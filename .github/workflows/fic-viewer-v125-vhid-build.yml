@@ -44,7 +44,7 @@ jobs:
           Copy-Item .\umdf\FICVhidUm.h $srcDir -Force
           Copy-Item .\umdf\FICVhidCommon.h $srcDir -Force
           Copy-Item .\umdf\util.c $srcDir -Force
-          Copy-Item .\umdf\FICVhidUm.inf $srcDir -Force
+          Copy-Item .\umdf\FICVhidUm.inf (Join-Path $srcDir 'FICVhidUm.inf.txt') -Force
           Copy-Item .\umdf\FICVhidUm.vcxproj $srcDir -Force
           Copy-Item .\umdf\MS-PL-NOTICE.txt $srcDir -Force
 
@@ -57,8 +57,6 @@ jobs:
           $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=FIC Viewer Virtual HID Driver Signing' -FriendlyName 'FIC Viewer Virtual HID Driver Signing' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddYears(10)
           $cerPath = Join-Path $pkg 'FICVhid-DriverSigning.cer'
           Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
-          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\CurrentUser\Root' | Out-Null
-          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\CurrentUser\TrustedPublisher' | Out-Null
 
           $signtool = Get-ChildItem .\packages -Recurse -File -Filter signtool.exe | Where-Object { $_.FullName -match '\\x64\\' } | Select-Object -First 1
           if (-not $signtool) { $signtool = Get-ChildItem .\packages -Recurse -File -Filter signtool.exe | Select-Object -First 1 }
