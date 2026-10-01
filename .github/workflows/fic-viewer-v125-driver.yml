@@ -1,0 +1,62 @@
+name: FIC Viewer V1.2.5 VHF Driver Probe
+
+on:
+  push:
+    branches: [ fic-viewer-v1.2.5-build ]
+  workflow_dispatch:
+
+jobs:
+  build-vhf-drivers:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install matching Windows SDK and WDK 26100
+        shell: pwsh
+        run: |
+          winget install --id Microsoft.WindowsSDK.10.0.26100 -e --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
+          winget install --id Microsoft.WindowsWDK.10.0.26100 -e --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
+
+      - name: Clone MIT VHF reference implementation
+        shell: pwsh
+        run: |
+          git clone --depth 1 https://github.com/GSD/KVM-Drivers.git kvm-drivers
+
+      - name: Show WDK and source layout
+        shell: pwsh
+        run: |
+          Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Include' -ErrorAction SilentlyContinue | Select-Object Name
+          Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Lib' -ErrorAction SilentlyContinue | Select-Object Name
+          Get-ChildItem .\kvm-drivers\src\drivers\vhidkb
+          Get-ChildItem .\kvm-drivers\src\drivers\vhidmouse
+
+      - name: Build VHF keyboard driver
+        shell: pwsh
+        run: |
+          msbuild .\kvm-drivers\src\drivers\vhidkb\vhidkb.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:minimal
+
+      - name: Build virtual mouse driver
+        shell: pwsh
+        run: |
+          msbuild .\kvm-drivers\src\drivers\vhidmouse\vhidmouse.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:minimal
+
+      - name: Collect driver outputs
+        if: always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifact | Out-Null
+          Get-ChildItem .\kvm-drivers -Recurse -File -Include *.sys,*.inf,*.cat,*.pdb |
+            Copy-Item -Destination artifact -Force
+          Get-ChildItem artifact -ErrorAction SilentlyContinue
+
+      - name: Upload probe outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fic-viewer-v125-vhf-probe
+          path: artifact
+          if-no-files-found: ignore
