@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Restore WDK NuGet packages
         shell: pwsh
         working-directory: fic-viewer-v1.2.5
