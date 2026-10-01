@@ -38,13 +38,6 @@ jobs:
           Copy-Item .\driver\out\FICVhid.sys $pkg -Force
           Copy-Item .\driver\FICVhid.inf $pkg -Force
 
-          $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
-          if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
-
-          Write-Host "Inf2Cat: $($inf2cat.FullName)"
-          & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
           $cert = New-SelfSignedCertificate `
             -Type CodeSigningCert `
             -Subject 'CN=FIC Viewer V1.2.5 Test Driver' `
@@ -55,7 +48,11 @@ jobs:
             -HashAlgorithm SHA256 `
             -NotAfter (Get-Date).AddYears(2)
 
-          Export-Certificate -Cert $cert -FilePath (Join-Path $pkg 'FICViewer-V1.2.5-TestDriver.cer') | Out-Null
+          $cerPath = Join-Path $pkg 'FICViewer-V1.2.5-TestDriver.cer'
+          Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
+
+          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\CurrentUser\Root' | Out-Null
+          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\CurrentUser\TrustedPublisher' | Out-Null
 
           $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -File -Filter signtool.exe |
             Where-Object { $_.FullName -match '\\x64\\signtool\.exe$' } |
@@ -65,10 +62,22 @@ jobs:
 
           Write-Host "SignTool: $($signtool.FullName)"
 
-          foreach ($file in @('FICVhid.sys','FICVhid.cat')) {
-            $path = Join-Path $pkg $file
-            & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $path
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $sys = Join-Path $pkg 'FICVhid.sys'
+          & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $sys
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
+          if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
+
+          Write-Host "Inf2Cat: $($inf2cat.FullName)"
+          & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $cat = Join-Path $pkg 'FICVhid.cat'
+          & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $cat
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          foreach ($path in @($sys,$cat)) {
             & $signtool.FullName verify /v /pa $path
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
