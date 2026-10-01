@@ -31,6 +31,10 @@ jobs:
       - name: Build official UMDF2 virtual HID sample x64
         shell: pwsh
         run: |
+          $stamp = Get-ChildItem .\driver-samples\packages -Recurse -File -Filter stampinf.exe | Select-Object -First 1
+          if (-not $stamp) { throw "stampinf.exe not found in restored WDK" }
+          $env:Path = "$($stamp.Directory.FullName);$env:Path"
+          Write-Host "Using WDK tools from $($stamp.Directory.FullName)"
           msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
 
       - name: Collect UMDF outputs
