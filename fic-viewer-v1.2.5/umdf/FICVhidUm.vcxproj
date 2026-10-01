@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F1C01250-1D2F-4E5A-8125-000000000125}</ProjectGuid>
+    <RootNamespace>FICVhidUm</RootNamespace>
+    <UMDF_VERSION_MAJOR>2</UMDF_VERSION_MAJOR>
+    <Configuration>Release</Configuration>
+    <Platform>x64</Platform>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetVersion>Windows10</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <DriverTargetPlatform>Windows Driver</DriverTargetPlatform>
+    <DriverType>UMDF</DriverType>
+    <PlatformToolset>WindowsUserModeDriver10.0</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)out\</OutDir>
+    <IntDir>$(ProjectDir)obj\</IntDir>
+    <TargetName>FICVhidUm</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_UNICODE;UNICODE</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DDK_INC_PATH);$(DDK_INC_PATH)\wdm;$(ProjectDir)</AdditionalIncludeDirectories>
+      <ExceptionHandling></ExceptionHandling>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Midl>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_UNICODE;UNICODE</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DDK_INC_PATH);$(DDK_INC_PATH)\wdm;$(ProjectDir)</AdditionalIncludeDirectories>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies);mincore.lib</AdditionalDependencies>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="FICVhidUm.c" />
+    <ClCompile Include="util.c" />
+    <ClInclude Include="FICVhidUm.h" />
+    <ClInclude Include="FICVhidCommon.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
