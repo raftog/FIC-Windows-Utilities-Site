@@ -20,9 +20,9 @@ DefaultDestDir=13
 FICVhidUm.dll=1
 
 [Manufacturer]
-%ManufacturerString%=FIC,NTamd64.10.0...22000
+%ManufacturerString%=FIC,NTamd64.10.0
 
-[FIC.NTamd64.10.0...22000]
+[FIC.NTamd64.10.0]
 %DeviceDesc%=FICVhidUm,root\FICVhidUm
 
 [FICVhidUm.NT]
