@@ -1,9 +1,6 @@
 name: FIC Viewer V1.2.5 UMDF HID Build
 
 on:
-  push:
-    branches:
-      - fic-viewer-v1.2.5-build
   workflow_dispatch:
 
 jobs:
@@ -28,14 +25,19 @@ jobs:
         run: |
           nuget restore .\packages.config -PackagesDirectory .\packages
 
-      - name: Build official UMDF2 virtual HID sample x64
+      - name: Patch probe project to compile DLL only
         shell: pwsh
         run: |
-          $stamp = Get-ChildItem .\driver-samples\packages\Microsoft.Windows.WDK.x64.* -Recurse -File -Filter stampinf.exe | Where-Object { $_.Directory.Name -eq 'x86' } | Select-Object -First 1
-          if (-not $stamp) { throw 'stampinf.exe not found in restored x64 WDK package' }
-          $env:Path = $stamp.Directory.FullName + ';' + $env:Path
-          Write-Host ('Using WDK tools from ' + $stamp.Directory.FullName)
-          msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
+          $proj = '.\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj'
+          $xml = Get-Content -LiteralPath $proj -Raw
+          $xml = $xml -replace '<Inf Exclude="@\(Inf\)" Include="\*\.inx" />',''
+          $xml = $xml -replace '<FilesToPackage Include="\$\(TargetPath\)" Condition="[^"]*" />',''
+          Set-Content -LiteralPath $proj -Value $xml -Encoding UTF8
+
+      - name: Build official UMDF2 virtual HID DLL x64
+        shell: pwsh
+        run: |
+          msbuild .\driver-samples\hid\vhidmini2\driver\umdf2\VhidminiUm.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off /m /v:minimal
 
       - name: Collect UMDF outputs
         if: always()
@@ -43,8 +45,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force artifact | Out-Null
           Get-ChildItem .\driver-samples\hid\vhidmini2 -Recurse -File |
-            Where-Object { $_.Name -like 'VhidminiUm.*' } |
-            Where-Object { $_.Extension -in '.dll','.inf','.cat','.pdb' } |
+            Where-Object { $_.Name -match '^VhidminiUm\.(dll|pdb)$' -or $_.Name -eq 'VhidminiUm.inx' } |
             Copy-Item -Destination artifact -Force
           Get-ChildItem artifact -ErrorAction SilentlyContinue
 
