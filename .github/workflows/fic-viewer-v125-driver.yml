@@ -79,9 +79,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           foreach ($path in @($sys,$cat)) {
-            & $signtool.FullName verify /v /kp $path
+            & $signtool.FullName verify /v /pa $path
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
+
+          & $signtool.FullName verify /v /pa /c $cat $sys
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           @(
             'FIC Viewer V1.2.5 VHF test package',
