@@ -139,6 +139,7 @@ NTSTATUS FicEvtDeviceAdd(WDFDRIVER Driver, PWDFDEVICE_INIT DeviceInit)
     VHF_CONFIG vhfConfig;
     UNICODE_STRING deviceName;
     UNICODE_STRING symLink;
+    UNICODE_STRING sddl;
 
     UNREFERENCED_PARAMETER(Driver);
 
@@ -148,6 +149,10 @@ NTSTATUS FicEvtDeviceAdd(WDFDRIVER Driver, PWDFDEVICE_INIT DeviceInit)
 
     WdfDeviceInitSetDeviceType(DeviceInit, FILE_DEVICE_UNKNOWN);
     WdfDeviceInitSetExclusive(DeviceInit, FALSE);
+
+    RtlInitUnicodeString(&sddl, L"D:P(A;;GA;;;SY)(A;;GA;;;BA)");
+    status = WdfDeviceInitAssignSDDLString(DeviceInit, &sddl);
+    if (!NT_SUCCESS(status)) return status;
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
     attributes.EvtCleanupCallback = FicEvtDeviceCleanup;
