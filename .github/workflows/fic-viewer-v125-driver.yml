@@ -1,4 +1,4 @@
-name: FIC Viewer V1.2.5 VHF Driver Probe
+name: FIC Viewer V1.2.5 VHF Driver Build
 
 on:
   push:
@@ -6,57 +6,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-vhf-drivers:
-    runs-on: windows-latest
-    timeout-minutes: 45
+  build:
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Install matching Windows SDK and WDK 26100
+      - name: Restore WDK NuGet packages
         shell: pwsh
+        working-directory: fic-viewer-v1.2.5
         run: |
-          winget install --id Microsoft.WindowsSDK.10.0.26100 -e --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
-          winget install --id Microsoft.WindowsWDK.10.0.26100 -e --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
+          nuget restore .\packages.config -PackagesDirectory .\packages
 
-      - name: Clone MIT VHF reference implementation
+      - name: Build FIC virtual HID driver
         shell: pwsh
+        working-directory: fic-viewer-v1.2.5
         run: |
-          git clone --depth 1 https://github.com/GSD/KVM-Drivers.git kvm-drivers
+          msbuild .\driver\FICVhid.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
 
-      - name: Show WDK and source layout
-        shell: pwsh
-        run: |
-          Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Include' -ErrorAction SilentlyContinue | Select-Object Name
-          Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Lib' -ErrorAction SilentlyContinue | Select-Object Name
-          Get-ChildItem .\kvm-drivers\src\drivers\vhidkb
-          Get-ChildItem .\kvm-drivers\src\drivers\vhidmouse
-
-      - name: Build VHF keyboard driver
-        shell: pwsh
-        run: |
-          msbuild .\kvm-drivers\src\drivers\vhidkb\vhidkb.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:minimal
-
-      - name: Build virtual mouse driver
-        shell: pwsh
-        run: |
-          msbuild .\kvm-drivers\src\drivers\vhidmouse\vhidmouse.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:minimal
-
-      - name: Collect driver outputs
+      - name: Collect outputs
         if: always()
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force artifact | Out-Null
-          Get-ChildItem .\kvm-drivers -Recurse -File -Include *.sys,*.inf,*.cat,*.pdb |
+          Get-ChildItem .\fic-viewer-v1.2.5 -Recurse -File -Include FICVhid.sys,FICVhid.inf,FICVhid.cat,FICVhid.pdb |
             Copy-Item -Destination artifact -Force
           Get-ChildItem artifact -ErrorAction SilentlyContinue
 
-      - name: Upload probe outputs
+      - name: Upload driver artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fic-viewer-v125-vhf-probe
+          name: fic-viewer-v1.2.5-vhid
           path: artifact
-          if-no-files-found: ignore
+          if-no-files-found: warn
