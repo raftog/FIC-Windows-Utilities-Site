@@ -39,7 +39,6 @@
   <ItemGroup>
     <ClCompile Include="FICVhid.c" />
     <ClInclude Include="FICVhidIoctl.h" />
-    <Inf Include="FICVhid.inf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
