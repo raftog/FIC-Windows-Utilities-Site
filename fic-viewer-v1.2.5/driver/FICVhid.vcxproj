@@ -35,6 +35,9 @@
     <Link>
       <AdditionalDependencies>VhfKm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FICVhid.c" />
