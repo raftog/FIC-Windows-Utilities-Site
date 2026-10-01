@@ -21,14 +21,13 @@ jobs:
         run: |
           nuget restore .\packages.config -PackagesDirectory .\packages
 
-      - name: Build FIC virtual HID driver
+      - name: Build unsigned FIC virtual HID driver
         shell: pwsh
         working-directory: fic-viewer-v1.2.5
         run: |
-          msbuild .\driver\FICVhid.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /m /v:minimal
+          msbuild .\driver\FICVhid.vcxproj /t:Clean,Build /p:Configuration=Release /p:Platform=x64 /p:SignMode=Off /m /v:minimal
 
-      - name: Build and test-sign driver package
-        timeout-minutes: 5
+      - name: Build driver package catalog
         shell: pwsh
         working-directory: fic-viewer-v1.2.5
         run: |
@@ -39,34 +38,6 @@ jobs:
           Copy-Item .\driver\out\FICVhid.sys $pkg -Force
           Copy-Item .\driver\FICVhid.inf $pkg -Force
 
-          $cert = New-SelfSignedCertificate `
-            -Type CodeSigningCert `
-            -Subject 'CN=FIC Viewer V1.2.5 Test Driver' `
-            -FriendlyName 'FIC Viewer V1.2.5 Test Driver' `
-            -CertStoreLocation 'Cert:\CurrentUser\My' `
-            -KeyAlgorithm RSA `
-            -KeyLength 2048 `
-            -HashAlgorithm SHA256 `
-            -NotAfter (Get-Date).AddYears(2)
-
-          $cerPath = Join-Path $pkg 'FICViewer-V1.2.5-TestDriver.cer'
-          Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
-
-          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\LocalMachine\Root' | Out-Null
-          Import-Certificate -FilePath $cerPath -CertStoreLocation 'Cert:\LocalMachine\TrustedPublisher' | Out-Null
-
-          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -File -Filter signtool.exe |
-            Where-Object { $_.FullName -match '\\x64\\signtool\.exe$' } |
-            Sort-Object FullName -Descending |
-            Select-Object -First 1
-          if (-not $signtool) { throw 'signtool.exe x64 not found' }
-
-          Write-Host "SignTool: $($signtool.FullName)"
-
-          $sys = Join-Path $pkg 'FICVhid.sys'
-          & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $sys
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
           $inf2cat = Get-ChildItem .\packages -Recurse -File -Filter Inf2Cat.exe | Select-Object -First 1
           if (-not $inf2cat) { throw 'Inf2Cat.exe not found in restored WDK packages' }
 
@@ -74,118 +45,40 @@ jobs:
           & $inf2cat.FullName /driver:$pkg /os:10_X64 /uselocaltime
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          $cat = Join-Path $pkg 'FICVhid.cat'
-          & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $cat
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-          foreach ($path in @($sys,$cat)) {
-            & $signtool.FullName verify /v /pa $path
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          }
-
-          & $signtool.FullName verify /v /pa /c $cat $sys
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-          $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-          if (-not $vs) { throw 'Visual Studio C++ toolchain not found' }
-
-          $devcmd = Join-Path $vs 'Common7\Tools\VsDevCmd.bat'
-          $installerSource = Join-Path $PWD 'installer\FICVhidInstall.cpp'
-          $installerExe = Join-Path $pkg 'FICVhidInstall.exe'
-          $compile = "`"$devcmd`" -no_logo -arch=x64 -host_arch=x64 && cl.exe /nologo /O2 /EHsc /DUNICODE /D_UNICODE `"$installerSource`" /link /nologo setupapi.lib newdev.lib /out:`"$installerExe`""
-          & $env:ComSpec /d /s /c $compile
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-          & $signtool.FullName sign /v /fd SHA256 /a /s My /n 'FIC Viewer V1.2.5 Test Driver' $installerExe
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          & $signtool.FullName verify /v /pa $installerExe
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
           @(
-            '@echo off',
-            'setlocal EnableExtensions',
-            'cd /d "%~dp0"',
+            'FIC Viewer V1.2.5 VHF BUILD-READY package',
             '',
-            'fltmc >nul 2>&1',
-            'if errorlevel 1 (',
-            '  echo Requesting administrator rights...',
-            '  powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath ''''%~f0'''' -Verb RunAs"',
-            '  exit /b',
-            ')',
+            'Contents: FICVhid.sys + FICVhid.inf + FICVhid.cat.',
+            'The catalog is intentionally unsigned.',
+            'Run the separate FIC_Viewer_V1.2.5_FINALIZE_TEST_DRIVER.ps1 on the signing PC.',
+            'No private key is stored in this package.',
             '',
-            'set "RC=0"',
-            'echo Enabling Windows Test Mode...',
-            'bcdedit /set testsigning on',
-            'if errorlevel 1 goto bcd_failed',
-            '',
-            'echo Trusting the FIC Viewer V1.2.5 test driver certificate...',
-            'certutil.exe -addstore -f Root "%~dp0FICViewer-V1.2.5-TestDriver.cer"',
-            'if errorlevel 1 goto failed',
-            'certutil.exe -addstore -f TrustedPublisher "%~dp0FICViewer-V1.2.5-TestDriver.cer"',
-            'if errorlevel 1 goto failed',
-            '',
-            'echo Creating/updating ROOT\FICVhid...',
-            '"%~dp0FICVhidInstall.exe" "%~dp0FICVhid.inf" "Root\FICVhid"',
-            'set "RC=%ERRORLEVEL%"',
-            'if %RC% LEQ 1 goto installed',
-            '',
-            'echo.',
-            'echo Driver installation did not complete.',
-            'echo If Test Mode was enabled by this run, REBOOT Windows and run this same file again.',
-            'echo If it still fails after reboot, send the exact error shown above.',
-            'goto end',
-            '',
-            ':installed',
-            'echo.',
-            'echo Driver package installed. Current device/driver information:',
-            'pnputil.exe /enum-devices /deviceid "ROOT\FICVhid" /drivers',
-            'sc.exe query FICVhid',
-            'echo.',
-            'if %RC% EQU 1 echo Windows requested a reboot.',
-            'echo FIC Viewer V1.2.5 Virtual HID test driver installation finished.',
-            'goto end',
-            '',
-            ':bcd_failed',
-            'set "RC=2"',
-            'echo.',
-            'echo Windows could not enable Test Mode. Secure Boot may be blocking TESTSIGNING.',
-            'echo No driver installation was attempted.',
-            'goto end',
-            '',
-            ':failed',
-            'set "RC=2"',
-            'echo.',
-            'echo Certificate installation failed.',
-            '',
-            ':end',
-            'echo.',
-            'pause',
-            'exit /b %RC%'
-          ) | Set-Content -Encoding ASCII (Join-Path $pkg 'INSTALL-TEST-DRIVER.cmd')
-
-          @(
-            'FIC Viewer V1.2.5 VHF test package',
-            '',
-            'This package is TEST-SIGNED for development only.',
-            'It does not contain a private key.',
-            '',
-            'Target test machine:',
-            '1. Enable Windows Test Mode before installing this driver.',
-            '2. Import FICViewer-V1.2.5-TestDriver.cer into LocalMachine Trusted Root Certification Authorities and Trusted Publishers.',
-            '3. Run INSTALL-TEST-DRIVER.cmd. It creates ROOT\FICVhid without requiring DevCon/WDK.',
-            '4. If Test Mode was only just enabled, reboot Windows and run INSTALL-TEST-DRIVER.cmd again.',
-            '5. The driver exposes \\.\FICVirtualInput and creates a VHF keyboard + absolute mouse.',
-            '6. Access to the injection device is restricted to LocalSystem and Administrators.',
-            '',
+            'After catalog signing, install only on a Windows test machine with Test Mode enabled.',
             'Production deployment requires Microsoft driver signing.'
-          ) | Set-Content -Encoding UTF8 (Join-Path $pkg 'TESTING-README.txt')
+          ) | Set-Content -Encoding UTF8 (Join-Path $pkg 'BUILD-READY-README.txt')
+
+          Get-FileHash (Join-Path $pkg 'FICVhid.sys') -Algorithm SHA256 |
+            ForEach-Object { "FICVhid.sys SHA256=$($_.Hash)" } |
+            Set-Content -Encoding ASCII (Join-Path $pkg 'SHA256.txt')
+          Get-FileHash (Join-Path $pkg 'FICVhid.inf') -Algorithm SHA256 |
+            ForEach-Object { "FICVhid.inf SHA256=$($_.Hash)" } |
+            Add-Content -Encoding ASCII (Join-Path $pkg 'SHA256.txt')
+          Get-FileHash (Join-Path $pkg 'FICVhid.cat') -Algorithm SHA256 |
+            ForEach-Object { "FICVhid.cat SHA256=$($_.Hash)" } |
+            Add-Content -Encoding ASCII (Join-Path $pkg 'SHA256.txt')
 
           Get-ChildItem $pkg | Select-Object Name,Length
 
-      - name: Upload driver artifact
+      - name: Upload build-ready driver package
         uses: actions/upload-artifact@v4
         with:
-          name: fic-viewer-v1.2.5-vhid-test-signed
+          name: FIC_Viewer_V1.2.5_SECUREINPUT_BUILD_READY
           path: fic-viewer-v1.2.5/package-vhf
+          if-no-files-found: error
+
+      - name: Upload finalize signing script
+        uses: actions/upload-artifact@v4
+        with:
+          name: FIC_Viewer_V1.2.5_FINALIZE_TEST_DRIVER
+          path: fic-viewer-v1.2.5/FIC_Viewer_V1.2.5_FINALIZE_TEST_DRIVER.ps1
           if-no-files-found: error
