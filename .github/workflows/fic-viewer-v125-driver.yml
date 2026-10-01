@@ -73,20 +73,20 @@ jobs:
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
 
-          @'
-FIC Viewer V1.2.5 VHF test package
-
-This package is TEST-SIGNED for development only.
-It does not contain a private key.
-
-Target test machine:
-1. Enable Windows Test Mode before installing this driver.
-2. Import FICViewer-V1.2.5-TestDriver.cer into LocalMachine Trusted Root Certification Authorities and Trusted Publishers.
-3. Install FICVhid.inf.
-4. The driver exposes \\.\FICVirtualInput and creates a VHF keyboard + absolute mouse.
-
-Production deployment requires Microsoft driver signing.
-'@ | Set-Content -Encoding UTF8 (Join-Path $pkg 'TESTING-README.txt')
+          @(
+            'FIC Viewer V1.2.5 VHF test package',
+            '',
+            'This package is TEST-SIGNED for development only.',
+            'It does not contain a private key.',
+            '',
+            'Target test machine:',
+            '1. Enable Windows Test Mode before installing this driver.',
+            '2. Import FICViewer-V1.2.5-TestDriver.cer into LocalMachine Trusted Root Certification Authorities and Trusted Publishers.',
+            '3. Install FICVhid.inf.',
+            '4. The driver exposes \\.\FICVirtualInput and creates a VHF keyboard + absolute mouse.',
+            '',
+            'Production deployment requires Microsoft driver signing.'
+          ) | Set-Content -Encoding UTF8 (Join-Path $pkg 'TESTING-README.txt')
 
           Get-ChildItem $pkg | Select-Object Name,Length
 
